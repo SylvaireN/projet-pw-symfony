@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ categorieShow.getNomCat() }}{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+         <a class="navbar-brand" href="{{ path('app_home') }}">Projet</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+            {% if app.user %}
+                <li class="nav-item ">
+                    <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
+                </li>
+
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ path('app_categorie_list') }}">List des catégorie</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_logout') }}">Deconnexion</a>
+                </li>
+            
+            {% else %}
+                 <li class="nav-item active">
+                    <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
+                </li>
+            {% endif %}
+            
+            
+            
+            
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="example-wrapper">
+{% if app.user %}
+        <div class="mb-3">
+            Vous êtes connecté(e) comme {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
+        </div>
+    {% endif %}
+    <h2>Catégorie: {{ categorieShow.getNomCat() }}</h2>
+    <h3><center>Liste des Contacts</center></h3>
+
+    <div class="container">
+        {% if contactBycategorieShow %}
+        <table id="showcontact" class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contact in contactBycategorieShow %}
+            <tr>
+                    <td>{{ contact.id }}</td>
+                    <td>{{ contact.nom }}</td>
+                    <td>{{ contact.prenom }}</td>
+                    <td>{{ contact.email }}</td>
+                    <td>{{ contact.telephone }}</td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    {% else %}
+        <p>Aucun Contact liée à cette categorie</p>
+    {% endif %} 
+
+    </div>
+
+</div>
+ <hr>
+ <a href="/listCategorie">Retour</a>
+{% endblock %}
