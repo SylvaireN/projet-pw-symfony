@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ categorieShow.getNomCat() }}{% endblock %}
+{% block title %}Write - Mail{% endblock %}
 
 {% block body %}
 <style>
@@ -20,11 +20,15 @@
                     <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
                 </li>
 
-               
+              
+                <li class="nav-item active">
+                    <a class="nav-link " href="{{ path('app_write_mail_educateur') }}">Mail à un Educateur</a>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_logout') }}">Deconnexion</a>
                 </li>
+               
             
             {% else %}
                  <li class="nav-item active">
@@ -42,47 +46,27 @@
         </div>
     </div>
 </nav>
+
 <div class="example-wrapper">
-{% if app.user %}
+ {% if app.user %}
         <div class="mb-3">
             Vous êtes connecté(e) comme {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
         </div>
     {% endif %}
-    <h2>Catégorie: {{ categorieShow.getNomCat() }}</h2>
-    <h3><center>Liste des Contacts</center></h3>
 
+    <h1>Mail à un Educateur</h1>
+   
     <div class="container">
-        {% if contactBycategorieShow %}
-        <table id="showcontact" class="table table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Email</th>
-                <th>Téléphone</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for contact in contactBycategorieShow %}
-            <tr>
-                    <td>{{ contact.id }}</td>
-                    <td>{{ contact.nom }}</td>
-                    <td>{{ contact.prenom }}</td>
-                    <td>{{ contact.email }}</td>
-                    <td>{{ contact.telephone }}</td>
-                
-            </tr>
-            {% endfor %}
-        </tbody>
-        </table>
-    {% else %}
-        <p>Aucun Contact liée à cette categorie</p>
-    {% endif %} 
-
+        {{form_start(mailContactForm)}}
+           
+            {{form_row(mailContactForm.contactid)}}
+            {{form_row(mailContactForm.objet)}}
+            {{form_row(mailContactForm.message)}}
+             
+            <button type="submit" class="btn btn-primary">valider</button>
+        {{form_end(mailContactForm)}}
     </div>
-
 </div>
- <hr>
- <a href="/listCategorie">Retour</a>
+
+
 {% endblock %}

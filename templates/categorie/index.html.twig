@@ -17,17 +17,31 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
             {% if app.user %}
-                <li class="nav-item ">
+                <li class="nav-item active">
                     <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
                 </li>
 
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ path('app_categorie_list') }}">List des catégorie</a>
+              
+                <li class="nav-item ">
+                    <a class="nav-link" href="{{ path('app_write_mail_educateur') }}">Mail à un Educateur</a>
+                </li>
+
+                <li class="nav-item ">
+                    <a class="nav-link" href="{{ path('app_write_mail_contact') }}">Mail à un Contact</a>
+                </li>
+                
+                <li class="nav-item ">
+                    <a class="nav-link" href="{{ path('app_mail_contact_list') }}">List des Mails aux Contact</a>
+                </li>
+
+                 <li class="nav-item ">
+                    <a class="nav-link" href="{{ path('app_mail_educateur_list') }}">List des Mails aux Educateurs</a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_logout') }}">Deconnexion</a>
                 </li>
+               
             
             {% else %}
                  <li class="nav-item active">

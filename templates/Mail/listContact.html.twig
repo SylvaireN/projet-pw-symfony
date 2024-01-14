@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ categorieShow.getNomCat() }}{% endblock %}
+{% block title %}list - Mail{% endblock %}
 
 {% block body %}
 <style>
@@ -20,7 +20,7 @@
                     <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
                 </li>
 
-               
+              
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_logout') }}">Deconnexion</a>
@@ -48,41 +48,39 @@
             Vous êtes connecté(e) comme {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
         </div>
     {% endif %}
-    <h2>Catégorie: {{ categorieShow.getNomCat() }}</h2>
-    <h3><center>Liste des Contacts</center></h3>
+    <h2>List des Mails envoyé aux contacts</h2>
 
     <div class="container">
-        {% if contactBycategorieShow %}
-        <table id="showcontact" class="table table-striped">
+        {% if allMailContact %}
+        <table id="showcategorie" class="table table-striped">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Email</th>
-                <th>Téléphone</th>
+                <th>Date</th>
+                <th>Objet</th>
+                <th>Message</th>
             </tr>
         </thead>
         <tbody>
-            {% for contact in contactBycategorieShow %}
+            {% for mail in allMailContact%}
             <tr>
-                    <td>{{ contact.id }}</td>
-                    <td>{{ contact.nom }}</td>
-                    <td>{{ contact.prenom }}</td>
-                    <td>{{ contact.email }}</td>
-                    <td>{{ contact.telephone }}</td>
-                
+                    <td>{{ mail.getId() }}</td>
+                    <td>{{ mail.getDatenvoi().format('Y-m-d ') }}</td>
+                    <td>{{ mail.getObjet() }}</td>
+                    <td>{{ mail.getMessage() }}</td>
+            
             </tr>
             {% endfor %}
         </tbody>
         </table>
     {% else %}
-        <p>Aucun Contact liée à cette categorie</p>
+        <p>Aucun envoyé à un contact</p>
     {% endif %} 
 
     </div>
 
+
 </div>
  <hr>
- <a href="/listCategorie">Retour</a>
+ <a href="/">Retour</a>
 {% endblock %}

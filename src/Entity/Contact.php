@@ -33,12 +33,16 @@ class Contact
     #[ORM\ManyToMany(targetEntity: MailContact::class, mappedBy: 'licenciecontact')]
     private Collection $mailContacts;
 
+    #[ORM\OneToMany(mappedBy: 'contactid', targetEntity: MailContacts::class)]
+    private Collection $mailsContactss;
+
    
 
     public function __construct()
     {
         $this->licencies = new ArrayCollection();
         $this->mailContacts = new ArrayCollection();
+        $this->mailsContactss = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -146,6 +150,36 @@ class Contact
     {
         if ($this->mailContacts->removeElement($mailContact)) {
             $mailContact->removeLicenciecontact($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MailContacts>
+     */
+    public function getMailsContactss(): Collection
+    {
+        return $this->mailsContactss;
+    }
+
+    public function addMailsContactss(MailContacts $mailsContactss): static
+    {
+        if (!$this->mailsContactss->contains($mailsContactss)) {
+            $this->mailsContactss->add($mailsContactss);
+            $mailsContactss->setContactid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMailsContactss(MailContacts $mailsContactss): static
+    {
+        if ($this->mailsContactss->removeElement($mailsContactss)) {
+            // set the owning side to null (unless already changed)
+            if ($mailsContactss->getContactid() === $this) {
+                $mailsContactss->setContactid(null);
+            }
         }
 
         return $this;

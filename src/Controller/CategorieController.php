@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Educateur;
+use App\Entity\MailContacts;
 use App\Entity\MailEdus;
 use App\Entity\Categorie;
 use App\Entity\Contact;
 use App\Entity\Licencie;
 use App\Form\MailEduFormType;
+use App\Form\MailContFormType;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,18 +20,9 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CategorieController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function index(): Response
-    {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
-        return $this->render('home/index.html.twig', [
-            'controller_name' => 'CategorieController',
-        ]);
-    }
+   
     private $mr;
-    #[Route('/listCategorie', name: 'app_categorie_list')]
+    #[Route('/', name: 'app_home')]
     public function listCategorie(ManagerRegistry $mr): Response
     {
         if (!$this->getUser()) {
@@ -104,5 +97,70 @@ class CategorieController extends AbstractController
                                                         'educateur' => $educateur,
                                                         'maileducateur' => $maileducateur,
                                                     ]);
+    }
+
+
+
+
+    #[Route('/writeMailContact', name: 'app_write_mail_contact')]
+    public function writeMailContact(Request $request, EntityManagerInterface $em, ManagerRegistry $mr) : Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $mailcont = new MailContacts();   
+
+        $mailContactForm = $this->createForm(MailContFormType::class, $mailcont);
+        $contacts = $mr->getRepository(Contact::class)->findAll();
+        $mailcontacts = $mr->getRepository(MailContacts::class)->findAll();
+
+        $mailContactForm->handleRequest($request);
+        if($mailContactForm->isSubmitted() && $mailContactForm->isValid()){
+
+            $em->persist($mailcont);
+            $em->flush();
+
+            return $this->redirectToRoute('app_home');
+        }
+       
+        return $this->render('Mail/sendContact.html.twig', ['controller_name' => 'CategorieController',
+                                                        'mailContactForm' => $mailContactForm->createView(),
+                                                        'contacts' => $contacts,
+                                                        'mailcontacts' => $mailcontacts,
+                                                    ]);
+    }
+
+    #[Route('/listMailContact', name: 'app_mail_contact_list')]
+    public function listMailContact(ManagerRegistry $mr): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $allMailContact = $mr->getRepository(MailContacts::class)->findAll();
+        $contact = $mr->getRepository(Contact::class)->findAll();
+        
+        return $this->render('Mail/listContact.html.twig', [
+            'allMailContact' => $allMailContact,
+            'contact' => $contact,
+        ]);
+    }
+
+
+    #[Route('/listMailEducateur', name: 'app_mail_educateur_list')]
+    public function listMailEducateur(ManagerRegistry $mr): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $allMailEducateur = $mr->getRepository(MailEdus::class)->findAll();
+        $educateur = $mr->getRepository(Educateur::class)->findAll();
+        
+        return $this->render('Mail/listEducateur.html.twig', [
+            'allMailEducateur' => $allMailEducateur,
+            'educateur' => $educateur,
+        ]);
     }
 }
